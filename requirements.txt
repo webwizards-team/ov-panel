@@ -1,0 +1,5 @@
+fastapi
+uvicorn
+alembic==1.15.1
+SQLAlchemy
+python-dotenv==1.1.0
