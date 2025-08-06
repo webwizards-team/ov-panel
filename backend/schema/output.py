@@ -4,5 +4,9 @@ from typing import Optional
 
 class Users(BaseModel):
     name: str
-    traffic: int
-    date: date
+    is_active: bool
+    expiry_date: date
+    owner: str
+    
+    class Config:
+        orm_mode = True
