@@ -1,5 +1,6 @@
 fastapi
 uvicorn
+pydantic_settings
 alembic==1.15.1
 SQLAlchemy
 python-dotenv==1.1.0

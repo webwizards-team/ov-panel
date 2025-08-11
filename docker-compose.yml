@@ -1,6 +1,5 @@
-
 services:
-  bot:
+  app:
     build: .
     ports:
       - "8000:8000"
@@ -10,6 +9,6 @@ services:
     volumes:
       - ./data:/ovpanel/data
       - ./backend:/ovpanel/backend
-    working_dir: /ovpanel/backend 
+    working_dir: /ovpanel/backend
     command: >
-      bash -c "cd /ovpanel/backend &&  alembic upgrade head && python app.py"
+      bash  -c "cd /ovpanel/backend &&  alembic upgrade head && python app.py"
