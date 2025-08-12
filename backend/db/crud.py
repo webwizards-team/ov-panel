@@ -34,7 +34,7 @@ def create_user(db: Session, request: CreateUser, owner: str):
 def update_user(db: Session, request: UpdateUser):
     user = db.query(User).filter(User.name == request.name).first()
     if not user:
-        raise HTTPException(status_code=404, detail="user not found")
+        raise HTTPException(status_code=404, detail="user not found on database")
 
     user.expiry_date = request.expiry_date
     db.commit()
@@ -45,7 +45,7 @@ def update_user(db: Session, request: UpdateUser):
 def delete_user(db: Session, name: str):
     user = db.query(User).filter(User.name == name).first()
     if not user:
-        raise HTTPException(status_code=404, detail="user not found")
+        raise HTTPException(status_code=404, detail="user not found on database")
 
     db.delete(user)
     db.commit()
