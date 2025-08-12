@@ -1,8 +1,13 @@
 import logging
 import os
 
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+LOG_FILE = os.path.join(os.path.dirname(BASE_DIR), "data", "app.log")
+
+os.makedirs(os.path.dirname(LOG_FILE), exist_ok=True)
+
 logging.basicConfig(
-    filename="../data/app.log",
+    filename=LOG_FILE,
     encoding="utf-8",
     filemode="a",
     format="{asctime} - {levelname} - {message}",
@@ -18,9 +23,8 @@ def get_10_logs():
     """
     Get the last 10 logs from the log file
     """
-    log_file = "../data/app.log"
-    if not os.path.exists(log_file):
+    if not os.path.exists(LOG_FILE):
         return []
-    with open(log_file, "r") as f:
+    with open(LOG_FILE, "r") as f:
         lines = f.readlines()
     return lines[-10:]
