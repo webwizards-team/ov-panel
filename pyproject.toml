@@ -1,0 +1,16 @@
+[project]
+name = "ov-panel"
+version = "0.1.0"
+description = "A webpanel for create and management ovpn users"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "fastapi",
+    "uvicorn",
+    "pydantic_settings",
+    "alembic==1.15.1",
+    "SQLAlchemy",
+    "python-dotenv==1.1.0",
+    "pexpect",
+    "psutil",
+]
