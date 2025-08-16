@@ -4,7 +4,7 @@ from fastapi import HTTPException
 from logger import logger
 from schema.output import Users as ShowUsers
 from schema._input import CreateUser, UpdateUser
-from .models import User
+from .models import User, Admin
 
 
 def get_all_users(db: Session):
@@ -50,3 +50,16 @@ def delete_user(db: Session, name: str):
     db.delete(user)
     db.commit()
     return {"detail": "User deleted successfully"}
+
+
+# admins crud
+def get_all_admins(db: Session):
+    admins = db.query(Admin).all()
+    return admins
+
+
+def it_is_admin(db: Session, username: str):
+    admin = db.query(Admin).filter(Admin.username == username).first()
+    if not admin:
+        return False
+    return admin

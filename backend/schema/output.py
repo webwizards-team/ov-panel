@@ -22,3 +22,7 @@ class ServerInfo(BaseModel):
     disk_used: int
     disk_percent: float
     uptime: int
+
+
+class Admins(BaseModel):
+    username: str
