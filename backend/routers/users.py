@@ -7,12 +7,15 @@ from schema._input import CreateUser, UpdateUser
 from db.engine import get_db
 from db import crud
 from operations.user_management import create_user_on_server, delete_user_on_server
+from auth.auth import get_current_user
 
 router = APIRouter(prefix="/user", tags=["Users"])
 
 
 @router.get("/all", response_model=List[ShowUsers])
-async def get_all_users(db: Session = Depends(get_db)):
+async def get_all_users(
+    db: Session = Depends(get_db), user: dict = Depends(get_current_user)
+):
     all_users = crud.get_all_users(db)
     return all_users
 
@@ -21,6 +24,7 @@ async def get_all_users(db: Session = Depends(get_db)):
 async def create_user(
     request: CreateUser,
     db: Session = Depends(get_db),
+    user: dict = Depends(get_current_user),
 ):
     server_result = create_user_on_server(request.name, request.expiry_date)
     if server_result == "error":
@@ -31,13 +35,19 @@ async def create_user(
 
 
 @router.put("/update")
-async def update_user(request: UpdateUser, db: Session = Depends(get_db)):
+async def update_user(
+    request: UpdateUser,
+    db: Session = Depends(get_db),
+    user: dict = Depends(get_current_user),
+):
     result = crud.update_user(db, request)
     return result
 
 
 @router.delete("/delete/{name}")
-async def delete_user(name: str, db: Session = Depends(get_db)):
+async def delete_user(
+    name: str, db: Session = Depends(get_db), user: dict = Depends(get_current_user)
+):
     server_result = await delete_user_on_server(name)
     if server_result == "not_found":
         raise HTTPException(status_code=404, detail="User not found on server")

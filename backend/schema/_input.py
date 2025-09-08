@@ -10,5 +10,4 @@ class CreateUser(BaseModel):
 
 
 class UpdateUser(BaseModel):
-    name: str = Field(min_length=3, max_length=10)
     expiry_date: Optional[date]

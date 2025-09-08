@@ -42,6 +42,18 @@ def update_user(db: Session, request: UpdateUser):
     return {"detail": "User updated successfully"}
 
 
+def change_user_status(db: Session, name: str, status: bool) -> bool:
+    try:
+        user = db.query(User).filter(User.name == name).first()
+        user.is_active == status
+        db.commit()
+        db.refresh(user)
+        return True
+    except Exception as e:
+        logger.error(f"Error when change status for user:{name} on db: {e}")
+        return False
+
+
 def delete_user(db: Session, name: str):
     user = db.query(User).filter(User.name == name).first()
     if not user:
