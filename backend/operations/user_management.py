@@ -82,6 +82,16 @@ async def delete_user_on_server(name, disable_on_db: bool = False) -> bool | str
         return False
 
 
+def download_ovpn_file(name: str) -> str | None:
+    """This function returns the path of the ovpn file for downloading"""
+    file_path = f"/root/{name}.ovpn"
+    if os.path.exists(file_path):
+        return file_path
+    else:
+        logger.error(f"File {file_path} does not exist.")
+        return None
+
+
 async def check_user_expiry_date():
     """Tihs function checks users' expiration dates"""
     db = next(get_db())

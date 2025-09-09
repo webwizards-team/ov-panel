@@ -1,12 +1,17 @@
 from typing import List
 from fastapi import APIRouter, Depends, HTTPException
+from fastapi.responses import FileResponse
 from sqlalchemy.orm import Session
 
 from schema.output import Users as ShowUsers
 from schema._input import CreateUser, UpdateUser
 from db.engine import get_db
 from db import crud
-from operations.user_management import create_user_on_server, delete_user_on_server
+from operations.user_management import (
+    create_user_on_server,
+    delete_user_on_server,
+    download_ovpn_file,
+)
 from auth.auth import get_current_user
 
 router = APIRouter(prefix="/user", tags=["Users"])
@@ -18,6 +23,22 @@ async def get_all_users(
 ):
     all_users = crud.get_all_users(db)
     return all_users
+
+
+@router.get("/dwonload/ovpn/{name}", response_model=ShowUsers)
+async def download_ovpn(
+    name: str,
+    user: dict = Depends(get_current_user),
+):
+    response = download_ovpn_file(name)
+    if response:
+        return FileResponse(
+            path=response,
+            filename=f"{name}.ovpn",
+            media_type="application/x-openvpn-profile",
+        )
+    else:
+        raise HTTPException(status_code=404, detail="OVPN file not found")
 
 
 @router.post("/create", response_model=ShowUsers)
