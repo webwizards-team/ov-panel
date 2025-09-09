@@ -1,5 +1,6 @@
 from sqlalchemy.orm import Session
 from fastapi import HTTPException
+from datetime import datetime
 
 from logger import logger
 from schema.output import Users as ShowUsers
@@ -52,6 +53,14 @@ def change_user_status(db: Session, name: str, status: bool) -> bool:
     except Exception as e:
         logger.error(f"Error when change status for user:{name} on db: {e}")
         return False
+
+
+def get_expired_users(db: Session):
+    return (
+        db.query(User)
+        .filter(User.expiry_date < datetime.now(), User.is_active == True)
+        .all()
+    )
 
 
 def delete_user(db: Session, name: str):
