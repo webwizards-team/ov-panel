@@ -5,6 +5,7 @@ from datetime import datetime
 import uvicorn
 
 from operations.daily_checks import check_user_expiry_date
+from config import config
 from routers import all_routers
 
 
@@ -30,7 +31,7 @@ async def startup_event():
 
 
 for router in all_routers:
-    api.include_router(router)
+    api.include_router(prefix=f"/{config.URLPATH}", router=router)
 
 if __name__ == "__main__":
     uvicorn.run("app:api", host="0.0.0.0", port=9000, reload=True)
