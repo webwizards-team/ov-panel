@@ -1,5 +1,6 @@
 from sqlalchemy.orm import Session
 from fastapi import HTTPException
+from datetime import datetime
 
 from logger import logger
 from schema.output import Users as ShowUsers
@@ -10,6 +11,13 @@ from .models import User, Admin
 def get_all_users(db: Session):
     users = db.query(User).all()
     return users
+
+
+def get_user_by_name(db: Session, name: str):
+    user = db.query(User).filter(User.name == name).first()
+    if user:
+        return user
+    return None
 
 
 def create_user(db: Session, request: CreateUser, owner: str):
@@ -52,6 +60,14 @@ def change_user_status(db: Session, name: str, status: bool) -> bool:
     except Exception as e:
         logger.error(f"Error when change status for user:{name} on db: {e}")
         return False
+
+
+def get_expired_users(db: Session):
+    return (
+        db.query(User)
+        .filter(User.expiry_date < datetime.now(), User.is_active == True)
+        .all()
+    )
 
 
 def delete_user(db: Session, name: str):

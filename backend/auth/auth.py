@@ -62,7 +62,7 @@ async def login(
     return {"access_token": access_token, "token_type": "bearer"}
 
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/login")
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl=f"/{config.URLPATH}/login")
 
 
 def get_current_user(token: str = Depends(oauth2_scheme)):

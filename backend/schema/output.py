@@ -1,6 +1,12 @@
 from pydantic import BaseModel, Field
 from datetime import date
-from typing import Optional
+from typing import Any, Optional
+
+
+class ResponseModel(BaseModel):
+    success: bool
+    msg: str
+    data: Optional[Any] = None
 
 
 class Users(BaseModel):
@@ -10,7 +16,7 @@ class Users(BaseModel):
     owner: str
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 
 class ServerInfo(BaseModel):
@@ -23,6 +29,12 @@ class ServerInfo(BaseModel):
     disk_percent: float
     uptime: int
 
+    class Config:
+        from_attributes = True
+
 
 class Admins(BaseModel):
     username: str
+
+    class Config:
+        from_attributes = True

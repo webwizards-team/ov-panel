@@ -2,7 +2,7 @@ import psutil
 import time
 from fastapi import HTTPException
 from logger import logger
-from schema.output import ServerInfo
+from schema.output import ServerInfo, ResponseModel
 
 
 async def get_server_info() -> ServerInfo:
@@ -19,6 +19,8 @@ async def get_server_info() -> ServerInfo:
         )
     except Exception as e:
         logger.error(f"error when get server info: {e}")
-        raise HTTPException(
-            status_code=500, detail="error when get server info, please check the logs"
+        return ResponseModel(
+            success=False,
+            msg="error when get server info, please check the logs",
+            data=None,
         )
