@@ -8,7 +8,7 @@ from logger import logger
 script_path = "/root/openvpn-install.sh"
 
 
-def create_user_on_server(name, expiry_date) -> bool | str:
+def create_user_on_server(name, expiry_date) -> bool:
     try:
         pexpect.spawn("chmod +x openvpn-install.sh", encoding="utf-8")
         bash = pexpect.spawn(f"bash {script_path}", encoding="utf-8", timeout=60)
@@ -24,10 +24,10 @@ def create_user_on_server(name, expiry_date) -> bool | str:
 
     except pexpect.exceptions.TIMEOUT:
         logger.error("time out when read exceeds")
-        return "error"
+        return False
     except Exception as e:
         logger.error(f"error when create a user on server: {e}")
-        return "error"
+        return False
 
 
 async def delete_user_on_server(name) -> bool | str:

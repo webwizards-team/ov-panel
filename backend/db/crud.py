@@ -13,6 +13,13 @@ def get_all_users(db: Session):
     return users
 
 
+def get_user_by_name(db: Session, name: str):
+    user = db.query(User).filter(User.name == name).first()
+    if user:
+        return user
+    return None
+
+
 def create_user(db: Session, request: CreateUser, owner: str):
     if db.query(User).filter(User.name == request.name).first():
         raise HTTPException(
